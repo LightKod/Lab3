@@ -1,4 +1,5 @@
 #include <iostream>
+#include "DataGenerator.cpp"
 
 using namespace std;
 
