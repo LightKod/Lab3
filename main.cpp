@@ -10,15 +10,15 @@ void PrintArray(int* a, int n) {
 		if ((i+1) % 10 == 0) cout << endl;
 	}
 }
-void InsertionSort(int *a, int n) {
+void InsertionSort(int *a, int n, ll& cc) {
 	int j, key;
-
+	cc = 0;
 	for (int i = 0; i < n; i++)
 	{
 		key = a[i];
 		j = i - 1;
 
-		while (j >= 0 && a[j] > key) {
+		while (++cc && j >= 0 && a[j] > key) {
 			a[j + 1] = a[j];
 			j--;
 		}
@@ -69,39 +69,87 @@ void MergeSort(int* a, int l, int r) {
 		Merge(a, l, m, r);
 	}
 }
-void Heapify(int* a, int n, int root) {
+void Heapify(int* a, int n, int root, ll& cc) {
 	int largest = root;
 
+	//Get the children nodes
 	int c1 = root * 2 + 1;
 	int c2 = root * 2 + 2;
 
-	if (c1 < n && a[c1] > a[largest]) {
+
+	//Find largest children
+	if (++cc && c1 < n && a[c1] > a[largest]) {
 		largest = c1;
 	}
 
-	if (c2 < n && a[c2] > a[largest]) {
+	if (++cc && c2 < n && a[c2] > a[largest]) {
 		largest = c2;
 	}
 
-	if (largest != root) Heapify(a, n, largest);
+	//If there is a child that is larger than the root
+	if (++cc && largest != root){
+		//Swap the largest child with its root
+		int temp = a[largest];
+		a[largest] = a[root];
+		a[root] = temp;
+		Heapify(a, n, largest);
+	} 
+		
 }
-void HeapSort(int *a, int n) {
+//https://www.geeksforgeeks.org/heap-sort/
+void HeapSort(int *a, int n, ll& cc) {
+	//Build max heap
+	cc = 0;
 	for (int i = 0; i < n/2-1; i++)
 	{
 		Heapify(a, n, i);
 	}
 
+	//Swap and heapify
 	for (int i = 0; i < n; i++)
 	{
 		int temp = a[0];
 		a[0] = a[i];
 		a[i] = temp;
 
-		Heapify(a, i, 0);
+		Heapify(a, i, 0,ll);
 	}
 }
-void SelectionSort();
-void BubbleSort();
+
+//https://www.geeksforgeeks.org/selection-sort/
+void SelectionSort(int *a, int n, ll& cc){
+	int minIndex = 0;
+	cc = 0;
+	//Loop through the array
+	for(int i = 0, i <  n; i ++){
+		int minIndex = i;	
+		//Find the min value of the array
+		for(int j =i+1; j < n; j++){
+			if(++cc && a[j] < a[minIndex]){
+				minIndex = j;
+			}
+		}
+	//Swap current index with min min value
+	int temp = a[i];
+	a[i] = a[minIndex];
+	a[minIndex] = temp;
+	}
+}
+
+//https://www.geeksforgeeks.org/bubble-sort/
+void BubbleSort(int *a, int n, ll& cc){
+	cc = 0;
+	//Loop through the array twice and then swap any element that has the wrong order
+	for(int i = 0, i <  n - 1; i++){
+		for(int j = 0; j < n - i - 1; j++){
+			if(++cc && a[j] > a[j+1]){
+				int temp = a[i];
+				a[i] = a[j];
+				a[j] = temp;
+			}
+		}
+	}
+}
 
 int main()
 {
