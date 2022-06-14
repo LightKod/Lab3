@@ -25,7 +25,7 @@ void InsertionSort(int *a, int n, ll& cc) {
 		a[j + 1] = key;
 	}
 }
-void Merge(int* a, int l, int m, int r) {
+void Merge(int* a, int l, int m, int r, ll& cc) {
 	int n1 = m - l + 1;
 	int n2 = r - m;
 
@@ -44,7 +44,7 @@ void Merge(int* a, int l, int m, int r) {
 	int count1 = 0, count2 = 0;
 	int k = l;
 	while (count1 < n1 && count2 < n1) {
-		if (temp1[count1] > temp2[count2]) {
+		if (++cc && temp1[count1] > temp2[count2]) {
 			a[k++] = temp2[count2++];
 		}
 		else {
@@ -60,10 +60,9 @@ void Merge(int* a, int l, int m, int r) {
 		a[k++] = temp2[count2++];
 	}
 }
-void MergeSort(int* a, int l, int r) {
+void MergeSort(int* a, int l, int r, ll& cc) {
 	if (l < r) {
 		int m = (l + r - 1) / 2;
-
 		MergeSort(a, l, m);
 		MergeSort(a, m+1, r);
 		Merge(a, l, m, r);
@@ -87,7 +86,7 @@ void Heapify(int* a, int n, int root, ll& cc) {
 	}
 
 	//If there is a child that is larger than the root
-	if (++cc && largest != root){
+	if (largest != root){
 		//Swap the largest child with its root
 		int temp = a[largest];
 		a[largest] = a[root];
