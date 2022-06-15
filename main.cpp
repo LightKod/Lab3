@@ -29,6 +29,8 @@ https://www.eriksmistad.no/measuring-runtime-in-milliseconds-using-the-c-11-chro
     .\a.exe -a heap-sort 70000 -comp
     //Command 4
     .\a.exe -c heap-sort merge-sort input.txt
+    //Command 5
+    .\a.exe -c heap-sort merge-sort 100000 -nsorted
 */
 void getMode(string mode)
 {
@@ -275,6 +277,49 @@ void command_4_main_function(int argc, char *argv[])
     handle_command_4(input_file, algo_1_name, algo_2_name);
 }
 
+void handle_command_5(string input_order, int input_size,string algo_1, string algo_2){
+    // create array
+    int *a = array1DInit(input_size);
+    if (a == NULL)
+    {
+        cout << "Error: do not have enough memory !\n";
+        return;
+    }
+
+    if(input_order == "-rand"){
+        GenerateRandomData(a, input_size);
+    }else if(input_order == "-nsorted"){
+        GenerateNearlySortedData(a, input_size);
+    }
+    else if(input_order == "-sorted"){
+        GenerateSortedData(a, input_size);
+    }else if(input_order == "-rev"){
+        GenerateReverseData(a, input_size);
+    }
+
+    ll run_time[2] = {0, 0};
+    ll count_cmp[2] = {0, 0};
+    process_sort(a, input_size, algo_1, run_time[0], count_cmp[0]);
+    process_sort(a, input_size, algo_2, run_time[1], count_cmp[1]);
+
+    cout << "Running time: " << run_time[0] << " ms\t"
+         << "| " << run_time[1] << " ms\n";
+    cout << "Comparisions: " << count_cmp[0] << "\t| " << count_cmp[1] << "\n";
+}
+void command_5_main_function(int argc, char *argv[])
+{
+    string mode = argv[1];
+    string algo_1_name = argv[2];
+    string algo_2_name = argv[3];
+    int input_size = stoi(argv[4]);
+    string input_order = argv[5];
+
+    getMode(mode);
+    cout << "Algorithm: " << GetAlgoType(algo_1_name) << " | " << GetAlgoType(algo_2_name) << endl;
+    cout << "Input size: " << input_size << "\n";
+    cout << "Input order: " << GetInputOrder(input_order) << "\n";
+    handle_command_5(input_order,input_size, algo_1_name, algo_2_name);
+}
 void commandChecker(int argc, char *argv[]){
     if(argc > 2){
         string mode = argv[1];
@@ -284,6 +329,7 @@ void commandChecker(int argc, char *argv[]){
                 command_4_main_function(argc, argv);
             }else if(argc == 6){
                 //Command 5
+                command_5_main_function(argc, argv);
             }
         }
         if(mode == "-a"){

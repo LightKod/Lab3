@@ -18,6 +18,7 @@ void freeArray1D(int *&a, int n)
     }
 }
 
+
 void PrintArray(int* a, int n) {
 	for (int i = 0; i < n; i++)
 	{
@@ -81,4 +82,62 @@ int *loadFile(string path, int &n)
         return a;
     }
     return NULL;
+}
+string GetInputOrder(string order){
+    char o = order[1];
+    switch (o)
+    {
+    case 'r':
+        switch (order[2])
+        {
+        case 'e':
+            return "Reverse Sorted";
+        case 'a':
+            return "Randomized";
+        default:
+            return "NULL";
+        }
+    case 'n':
+        return "Nearly Sorted";
+    case 's':
+        return "Sorted";
+    default:
+        return "NULL";
+    }
+}
+
+string GetAlgoType(string algo){
+    char first = algo[0];
+    switch(first){
+        case 'c':
+            return "Counting Sort";
+        case 'b':
+            return "Bubble Sort";
+        case 'f':
+            return "Flash Sort";
+        case 'h':
+            return "Heap Sort";
+        case 'i':
+            return "Insertion Sort";
+        case 'm':
+            return "Merge Sort";
+        case 'q':
+            return "Quick Sort";
+        case 'r':
+            return "Radix Sort";
+        case 's':
+            switch (algo[2])
+            {
+                case 'l':
+                    return "Selection Sort";
+                case 'a':
+                    return "Shaker Sort";
+                case 'e':
+                    return "Shell Sort";
+                default:
+                    return "NULL";
+            }
+        default:
+            return "NULL";
+    }
 }
