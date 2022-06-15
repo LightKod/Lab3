@@ -1,4 +1,8 @@
+#include "Utility.cpp"
 #include <iostream>
+#include <cstring>
+typedef long long ll;
+
 
 using namespace std;
 
@@ -56,9 +60,9 @@ void Merge(int* a, int l, int m, int r, ll& cc) {
 void MergeSort(int* a, int l, int r, ll& cc) {
 	if (l < r) {
 		int m = (l + r - 1) / 2;
-		MergeSort(a, l, m);
-		MergeSort(a, m+1, r);
-		Merge(a, l, m, r);
+		MergeSort(a, l, m, cc);
+		MergeSort(a, m+1, r, cc);
+		Merge(a, l, m, r,cc);
 	}
 }
 void Heapify(int* a, int n, int root, ll& cc) {
@@ -84,7 +88,7 @@ void Heapify(int* a, int n, int root, ll& cc) {
 		int temp = a[largest];
 		a[largest] = a[root];
 		a[root] = temp;
-		Heapify(a, n, largest);
+		Heapify(a, n, largest, cc);
 	} 
 		
 }
@@ -94,7 +98,7 @@ void HeapSort(int *a, int n, ll& cc) {
 	cc = 0;
 	for (int i = 0; i < n/2-1; i++)
 	{
-		Heapify(a, n, i);
+		Heapify(a, n, i, cc);
 	}
 
 	//Swap and heapify
@@ -104,7 +108,7 @@ void HeapSort(int *a, int n, ll& cc) {
 		a[0] = a[i];
 		a[i] = temp;
 
-		Heapify(a, i, 0,ll);
+		Heapify(a, i, 0,cc);
 	}
 }
 
@@ -113,7 +117,7 @@ void SelectionSort(int *a, int n, ll& cc){
 	int minIndex = 0;
 	cc = 0;
 	//Loop through the array
-	for(int i = 0, i <  n; i ++){
+	for(int i = 0; i <  n; i ++){
 		int minIndex = i;	
 		//Find the min value of the array
 		for(int j =i+1; j < n; j++){
@@ -132,7 +136,7 @@ void SelectionSort(int *a, int n, ll& cc){
 void BubbleSort(int *a, int n, ll& cc){
 	cc = 0;
 	//Loop through the array twice and then swap any element that has the wrong order
-	for(int i = 0, i <  n - 1; i++){
+	for(int i = 0; i <  n - 1; i++){
 		for(int j = 0; j < n - i - 1; j++){
 			if(++cc && a[j] > a[j+1]){
 				int temp = a[i];

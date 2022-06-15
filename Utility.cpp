@@ -1,8 +1,6 @@
-#include <iostream>
-
-using namespace std;
-
-
+#include <fstream>
+#include <sstream>
+#include <cstring>
 // dynamic allocate
 int *array1DInit(int n)
 {
@@ -26,6 +24,21 @@ void PrintArray(int* a, int n) {
 		cout << a[i] << " ";
 		if ((i+1) % 10 == 0) cout << endl;
 	}
+}
+
+
+void printArray(int *a, int n, ostream &os)
+{
+    os << n;
+    if (n > 0)
+    {
+        os << '\n';
+        os << a[0];
+        for (int i = 1; i < n; i++)
+        {
+            os << " " << a[i];
+        }
+    }
 }
 
 // Kiểm tra chuỗi hiện tại có phải là số nguyên hay không
