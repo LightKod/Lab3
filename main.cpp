@@ -25,7 +25,10 @@ https://www.eriksmistad.no/measuring-runtime-in-milliseconds-using-the-c-11-chro
 
 /*FOR TERMINAL RUN
     g++ main.cpp
+    //Command 3
     .\a.exe -a heap-sort 70000 -comp
+    //Command 4
+    .\a.exe -c heap-sort merge-sort input.txt
 */
 void getMode(string mode)
 {
@@ -58,25 +61,17 @@ void checkOutPutPara(string output_para, bool &runtime, bool &cmp)
         runtime = cmp = 1;
     }
 }
-void compare_info(ll cc, string line_info)
-{
-    cout << line_info << " " << cc << endl;
-}
-void runtime_info(ll dur, string line_info)
-{
-    cout << line_info << " " << dur << " ms\n";
-}
-void print_para_output(string output_para, ll dur, ll cc, string rt_info = "Running time:", string cmp_info = "Comparisions:")
+void print_para_output(string output_para, ll dur, ll cc)
 {
     bool runtime = 0, cmp = 0;
     checkOutPutPara(output_para, runtime, cmp);
     if (runtime)
     {
-        runtime_info(dur, rt_info);
+        cout << "Running time:" << " " << dur << " ms\n";
     }
     if (cmp)
     {
-        compare_info(cc, cmp_info);
+        cout << "Comparisions:" << " " << cc << endl;
     }
 }
 void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cmp)
@@ -149,6 +144,8 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     ret_dur = dur;
     ret_count_cmp = cc;
 }
+
+
 void handle_command_3(string algo_name, int input_size, string output_para)
 {
     // create array
@@ -278,16 +275,43 @@ void command_4_main_function(int argc, char *argv[])
     handle_command_4(input_file, algo_1_name, algo_2_name);
 }
 
+void commandChecker(int argc, char *argv[]){
+    if(argc > 2){
+        string mode = argv[1];
+        if(mode == "-c"){
+            if(argc == 5){
+                //Command 4
+                command_4_main_function(argc, argv);
+            }else if(argc == 6){
+                //Command 5
+            }
+        }
+        if(mode == "-a"){
+            if(argc == 5){
+                if(isVari(argv[3])){
+                    //Command 3
+                    command_3_main_function(argc, argv);
+                }else{
+                    //Command 4
+                }
+            }else if(argc == 6){
+                //Command 2
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
-    // cmd 3
-    if (is_command_3(argc, argv))
-    {
-        command_3_main_function(argc, argv);
-    }
-    // cmd 4
-    if (is_command_4(argc, argv))
-    {
-        command_4_main_function(argc, argv);
-    }
+    commandChecker(argc, argv);
+    // // cmd 3
+    // if (is_command_3(argc, argv))
+    // {
+    //     command_3_main_function(argc, argv);
+    // }
+    // // cmd 4
+    // if (is_command_4(argc, argv))
+    // {
+    //     command_4_main_function(argc, argv);
+    // }
 }
