@@ -368,17 +368,17 @@ void shakerSort(int a[], int n, ll &cc)
 void quickSort(int a[], int l, int r, ll &cc)
 {
     int pivot;
-    if (l < r)
+    if (++cc &&l < r)
     {
         pivot = (l + r) / 2;
         int i = l, j = r;
-        while (i < j)
+        while (++cc && i < j)
         {
             while (++cc && a[i] < a[pivot])
                 i++;
             while (++cc && a[j] > a[pivot])
                 j--;
-            if (i < j)
+            if (++c && i < j)
             {
                 HoanVi(a[i], a[j]);
                 i++;
@@ -392,22 +392,22 @@ void quickSort(int a[], int l, int r, ll &cc)
 /*
 Ref: https://www.geeksforgeeks.org/radix-sort/
 */
-void countSForRadix(int a[], int n, int exp)
+void countSForRadix(int a[], int n, int exp, ll& cc)
 {
     int* output = array1DInit(n);
     int i, count[10] = {0};
 
     // Store count of occurrences in count[]
-    for (i = 0; i < n; i++)
+    for (i = 0; ++cc && i < n; i++)
         count[(a[i] / exp) % 10]++;
 
     // Change count[i] so that count[i] now contains actual
     //  position of this digit in output[]
-    for (i = 1; i < 10; i++)
+    for (i = 1; ++c && i < 10; i++)
         count[i] += count[i - 1];
 
     // Build the output array
-    for (i = n - 1; i >= 0; i--)
+    for (i = n - 1; ++cc && i >= 0; i--)
     {
         output[count[(a[i] / exp) % 10] - 1] = a[i];
         count[(a[i] / exp) % 10]--;
@@ -415,9 +415,9 @@ void countSForRadix(int a[], int n, int exp)
 
     // Copy the output array to arr[], so that arr[] now
     // contains sorted numbers according to current digit
-    for (i = 0; i < n; i++)
+    for (i = 0; ++c && i < n; i++)
         a[i] = output[i];
-    delete[] output;
+    freeArray1D(output, n);
 }
 
 void radixSort(int a[], int n, ll &cc)
@@ -425,6 +425,6 @@ void radixSort(int a[], int n, ll &cc)
     int k = findMax(a, n, cc);
     for (int exp = 1; k / exp > 0; exp *= 10)
     {
-        countSForRadix(a, n, exp);
+        countSForRadix(a, n, exp, cc);
     }
 }
