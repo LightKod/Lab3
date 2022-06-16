@@ -17,6 +17,7 @@ https://www.eriksmistad.no/measuring-runtime-in-milliseconds-using-the-c-11-chro
 #ifdef TIMING
 #define INIT_TIMER auto start = std::chrono::high_resolution_clock::now();
 #define START_TIMER start = std::chrono::high_resolution_clock::now();
+#define INF 1000000007
 #define STOP_TIMER(info) std::cout << info << " " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() << " ms ";
 #else
 #define INIT_TIMER
@@ -75,6 +76,7 @@ void shellSort(int arr[], int n, ll &cc)
  * https://www.codingeek.com/algorithms/counting-sort-explanation-pseudocode-and-implementation/
  * *****/
 /*  Counting sort function  */
+// k is the largest element in array A[]
 void countingSort(int A[], int k, int n, ll &cc)
 {
     cc = 0;
@@ -222,6 +224,107 @@ void flashSort(int a[], int n, ll &cc)
     insertionSortUtil(a, n, cc);
 }
 
+int findMax(int a[], int n, ll &cc)
+{
+    int Max = -INF;
+    for (int i = 0; ++cc && i < n; ++i)
+    {
+        if (++cc && a[i] > Max)
+        {
+            Max = a[i];
+        }
+    }
+    return Max;
+}
+void shakerSort(int a[], int n, ll &cc)
+{
+    int l = 0, r = n - 1, k = 0;
+    while (++cc && l < r)
+    {
+        for (int i = l; ++cc && i < r; ++i)
+        {
+            if (++cc && a[i] > a[i + 1])
+            {
+                HoanVi(a[i], a[i + 1]);
+                k = i;
+            }
+        }
+        r = k;
+        for (int i = r; ++cc && i > l; --i)
+        {
+            if (++cc && a[i] < a[i - 1])
+            {
+                HoanVi(a[i], a[i - 1]);
+            }
+        }
+        l = k;
+    }
+}
+void quickSort(int a[], int l, int r, ll &cc)
+{
+    int pivot;
+    if (l < r)
+    {
+        pivot = (l + r) / 2;
+        int i = l, j = r;
+        while (i < j)
+        {
+            while (++cc && a[i] < a[pivot])
+                i++;
+            while (++cc && a[j] > a[pivot])
+                j--;
+            if (i < j)
+            {
+                HoanVi(a[i], a[j]);
+                i++;
+                j--;
+            }
+        }
+        quickSort(a, l, pivot - 1, cc);
+        quickSort(a, pivot + 1, r, cc);
+    }
+}
+/*
+Ref: https://www.geeksforgeeks.org/radix-sort/
+*/
+void countSForRadix(int a[], int n, int exp)
+{
+    int* output = array1DInit(n);
+    int i, count[10] = {0};
+
+    // Store count of occurrences in count[]
+    for (i = 0; i < n; i++)
+        count[(a[i] / exp) % 10]++;
+
+    // Change count[i] so that count[i] now contains actual
+    //  position of this digit in output[]
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    // Build the output array
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[(a[i] / exp) % 10] - 1] = a[i];
+        count[(a[i] / exp) % 10]--;
+    }
+
+    // Copy the output array to arr[], so that arr[] now
+    // contains sorted numbers according to current digit
+    for (i = 0; i < n; i++)
+        a[i] = output[i];
+    delete[] output;
+}
+
+void radixSort(int a[], int n, ll &cc)
+{
+    int k = findMax(a, n, cc);
+    for (int exp = 1; k / exp > 0; exp *= 10)
+    {
+        countSForRadix(a, n, exp);
+    }
+}
+
+
 // Kiểm tra chuỗi hiện tại có phải là số nguyên hay không
 bool isVari(string s)
 {
@@ -348,6 +451,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "shaker-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        shakerSort(a, n, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "shell-sort")
     {
@@ -363,6 +469,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "quick-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        quickSort(a, 0, n-1, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "counting-sort")
     {
@@ -372,6 +481,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "radix-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        radixSort(a, n, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "flash-sort")
     {
@@ -510,18 +622,4 @@ void command_4_main_function(int argc, char *argv[])
     cout << "Algorithm: " << algo_1_name << " | " << algo_2_name << endl;
     cout << "Input file: " << input_file << "\n";
     handle_command_4(input_file, algo_1_name, algo_2_name);
-}
-
-int main(int argc, char *argv[])
-{
-    // cmd 3
-    if (is_command_3(argc, argv))
-    {
-        command_3_main_function(argc, argv);
-    }
-    // cmd 4
-    if (is_command_4(argc, argv))
-    {
-        command_4_main_function(argc, argv);
-    }
 }
