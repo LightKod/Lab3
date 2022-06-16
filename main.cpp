@@ -7,6 +7,7 @@
 #include <time.h>
 #include <iomanip>
 #define TIMING
+#define INF 1000000007
 /*
 https://www.eriksmistad.no/measuring-runtime-in-milliseconds-using-the-c-11-chrono-library/
 */
@@ -105,6 +106,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "shaker-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        shakerSort(a, n, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "shell-sort")
     {
@@ -126,6 +130,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "quick-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        quickSort(a, 0, n-1, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "counting-sort")
     {
@@ -135,6 +142,9 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     }
     else if (algo_name == "radix-sort")
     {
+        start = std::chrono::high_resolution_clock::now();
+        radixSort(a, n, cc);
+        dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
     }
     else if (algo_name == "flash-sort")
     {
@@ -145,6 +155,96 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
 
     ret_dur = dur;
     ret_count_cmp = cc;
+}
+
+void handle_command_1(string algo_name, string input_file, string output_para)
+{
+    // create array
+    int input_size = 0;
+    int *a = loadFile(input_file, input_size);
+    if (a == NULL)
+    {
+        cout << "Error: do not have enough memory !\n";
+        return;
+    }
+
+    ll rtime = 0;
+    ll cc = 0;
+
+    cout << "\nInput:\n";
+    cout << "-------------------------\n";
+    writeFile("input.txt", a, input_size);
+    process_sort(a, input_size, algo_name, rtime, cc);
+    writeFile("output.txt", a, input_size);
+    print_para_output(output_para, rtime, cc);
+    // free memory
+    freeArray1D(a, input_size);
+}
+void command_1_main_function(int argc, char *argv[])
+{
+    string algo_name = argv[2];
+    string input_file = argv[3];
+    string output_para = argv[4];
+
+    cout << "Algorithm: " << algo_name << endl;
+    handle_command_1(algo_name, input_file, output_para);
+}
+
+
+void handle_command_2(string algo_name, int input_size, string input_order, string output_para)
+{
+    int* a = array1DInit(input_size);
+    if (a == NULL)
+    {
+        cout << "Error: do not have enough memory !\n";
+        return;
+    }
+    
+    ll rtime = 0;
+    ll cc = 0;
+
+    if (input_order == "-rand")
+    {
+        cout << "\nInput order: Randomize\n";
+        cout << "-------------------------\n";
+        GenerateData(a, input_size, 0);
+    }
+
+    else if (input_order == "-sorted")
+    {
+        cout << "\nInput order: Sorted\n";
+        cout << "-------------------------\n";
+        GenerateData(a, input_size, 1);
+    }
+
+    else if (input_order == "-rev")
+    {
+        cout << "\nInput order: Reverse sorted\n";
+        cout << "-------------------------\n";
+        GenerateData(a, input_size, 2);
+    }
+
+    else
+    {
+        cout << "\nInput order: Nearly sorted\n";
+        cout << "-------------------------\n";
+        GenerateData(a, input_size, 3);
+    }
+
+    writeFile("input.txt", a, input_size);
+    process_sort(a, input_size, algo_name, rtime, cc);
+    writeFile("output.txt", a, input_size);
+    print_para_output(output_para, rtime, cc);
+}
+void command_2_main_function(int argc, char *argv[])
+{
+    string algo_name = argv[2];
+    int input_size = stoi(argv[3]);
+    string input_order = argv[4];
+    string output_para = argv[4];
+
+    cout << "Algorithm: " << algo_name << endl;
+    handle_command_2(algo_name, input_size, input_order, output_para);
 }
 
 
@@ -338,10 +438,12 @@ void commandChecker(int argc, char *argv[]){
                     //Command 3
                     command_3_main_function(argc, argv);
                 }else{
-                    //Command 4
+                    //Command 1
+                    command_1_main_function(argc, argv);
                 }
             }else if(argc == 6){
                 //Command 2
+                command_2_main_function(argc, argv);
             }
         }
     }
@@ -361,3 +463,6 @@ int main(int argc, char *argv[])
     //     command_4_main_function(argc, argv);
     // }
 }
+/*
+C:\Users\ASUS\OneDrive\Documents\GitHub\Lab3\main.cpp
+*/

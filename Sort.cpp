@@ -1,6 +1,7 @@
 #include "Utility.cpp"
 #include <iostream>
 #include <cstring>
+#define INF 1000000007
 typedef long long ll;
 
 
@@ -327,3 +328,103 @@ void flashSort(int a[], int n, ll &cc)
     insertionSortUtil(a, n, cc);
 }
 
+int findMax(int a[], int n, ll &cc)
+{
+    int Max = -INF;
+    for (int i = 0; ++cc && i < n; ++i)
+    {
+        if (++cc && a[i] > Max)
+        {
+            Max = a[i];
+        }
+    }
+    return Max;
+}
+
+void shakerSort(int a[], int n, ll &cc)
+{
+    int l = 0, r = n - 1, k = 0;
+    while (++cc && l < r)
+    {
+        for (int i = l; ++cc && i < r; ++i)
+        {
+            if (++cc && a[i] > a[i + 1])
+            {
+                HoanVi(a[i], a[i + 1]);
+                k = i;
+            }
+        }
+        r = k;
+        for (int i = r; ++cc && i > l; --i)
+        {
+            if (++cc && a[i] < a[i - 1])
+            {
+                HoanVi(a[i], a[i - 1]);
+            }
+        }
+        l = k;
+    }
+}
+void quickSort(int a[], int l, int r, ll &cc)
+{
+    int pivot;
+    if (l < r)
+    {
+        pivot = (l + r) / 2;
+        int i = l, j = r;
+        while (i < j)
+        {
+            while (++cc && a[i] < a[pivot])
+                i++;
+            while (++cc && a[j] > a[pivot])
+                j--;
+            if (i < j)
+            {
+                HoanVi(a[i], a[j]);
+                i++;
+                j--;
+            }
+        }
+        quickSort(a, l, pivot - 1, cc);
+        quickSort(a, pivot + 1, r, cc);
+    }
+}
+/*
+Ref: https://www.geeksforgeeks.org/radix-sort/
+*/
+void countSForRadix(int a[], int n, int exp)
+{
+    int* output = array1DInit(n);
+    int i, count[10] = {0};
+
+    // Store count of occurrences in count[]
+    for (i = 0; i < n; i++)
+        count[(a[i] / exp) % 10]++;
+
+    // Change count[i] so that count[i] now contains actual
+    //  position of this digit in output[]
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    // Build the output array
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[(a[i] / exp) % 10] - 1] = a[i];
+        count[(a[i] / exp) % 10]--;
+    }
+
+    // Copy the output array to arr[], so that arr[] now
+    // contains sorted numbers according to current digit
+    for (i = 0; i < n; i++)
+        a[i] = output[i];
+    delete[] output;
+}
+
+void radixSort(int a[], int n, ll &cc)
+{
+    int k = findMax(a, n, cc);
+    for (int exp = 1; k / exp > 0; exp *= 10)
+    {
+        countSForRadix(a, n, exp);
+    }
+}
