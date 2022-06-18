@@ -26,6 +26,10 @@ https://www.eriksmistad.no/measuring-runtime-in-milliseconds-using-the-c-11-chro
 
 /*FOR TERMINAL RUN
     g++ main.cpp
+    //Command 1
+    .\a.exe -a radix-sort input.txt -both
+    //Command 2
+    .\a.exe -a selection-sort 50 -rand -time
     //Command 3
     .\a.exe -a heap-sort 70000 -comp
     //Command 4
@@ -157,6 +161,7 @@ void process_sort(int *a, int n, string algo_name, ll &ret_dur, ll &ret_count_cm
     ret_count_cmp = cc;
 }
 
+//Command 1
 void handle_command_1(string algo_name, string input_file, string output_para)
 {
     // create array
@@ -186,11 +191,11 @@ void command_1_main_function(int argc, char *argv[])
     string input_file = argv[3];
     string output_para = argv[4];
 
-    cout << "Algorithm: " << algo_name << endl;
+    cout << "Algorithm: " << GetAlgoType(algo_name) << endl;
     handle_command_1(algo_name, input_file, output_para);
 }
 
-
+//Command2
 void handle_command_2(string algo_name, int input_size, string input_order, string output_para)
 {
     int* a = array1DInit(input_size);
@@ -243,11 +248,11 @@ void command_2_main_function(int argc, char *argv[])
     string input_order = argv[4];
     string output_para = argv[4];
 
-    cout << "Algorithm: " << algo_name << endl;
+    cout << "Algorithm: " << GetAlgoType(algo_name) << endl;
     handle_command_2(algo_name, input_size, input_order, output_para);
 }
 
-
+//Command 3
 void handle_command_3(string algo_name, int input_size, string output_para)
 {
     // create array
@@ -296,23 +301,6 @@ void handle_command_3(string algo_name, int input_size, string output_para)
     // free memory
     freeArray1D(a, input_size);
 }
-// kiem tra co phai command_3 hay khong
-bool is_command_3(int argc, char *argv[])
-{
-    if (argc > 4)
-    {
-        string mode = argv[1];
-        if (mode == "-a")
-        {
-            string line_3 = argv[3];
-            if (isVari(line_3))
-            {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
 void command_3_main_function(int argc, char *argv[])
 {
     string mode = argv[1];
@@ -321,27 +309,12 @@ void command_3_main_function(int argc, char *argv[])
     string output_para = argv[4];
 
     getMode(mode);
-    cout << "Algorithm: " << algo_name << endl;
+    cout << "Algorithm: " << GetAlgoType(algo_name) << endl;
     cout << "Input size: " << input_size << "\n";
     handle_command_3(algo_name, input_size, output_para);
 }
 
-// kiem tra co phai command_4 hay khong
-bool is_command_4(int argc, char *argv[])
-{
-    if (argc > 2)
-    {
-        string mode = argv[1];
-        if (mode == "-c")
-        {
-            if (argc == 5)
-            {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
+//Command 4
 void handle_command_4(string input_file, string algo_1, string algo_2)
 {
     int n = 0;
@@ -372,11 +345,12 @@ void command_4_main_function(int argc, char *argv[])
     string input_file = argv[4];
 
     getMode(mode);
-    cout << "Algorithm: " << algo_1_name << " | " << algo_2_name << endl;
+    cout << "Algorithm: " << GetAlgoType(algo_1_name) << " | " << GetAlgoType(algo_2_name) << endl;
     cout << "Input file: " << input_file << "\n";
     handle_command_4(input_file, algo_1_name, algo_2_name);
 }
 
+//Command 5
 void handle_command_5(string input_order, int input_size,string algo_1, string algo_2){
     // create array
     int *a = array1DInit(input_size);
@@ -420,6 +394,8 @@ void command_5_main_function(int argc, char *argv[])
     cout << "Input order: " << GetInputOrder(input_order) << "\n";
     handle_command_5(input_order,input_size, algo_1_name, algo_2_name);
 }
+
+//Kiem tra dieu kiem command
 void commandChecker(int argc, char *argv[]){
     if(argc > 2){
         string mode = argv[1];
@@ -452,17 +428,4 @@ void commandChecker(int argc, char *argv[]){
 int main(int argc, char *argv[])
 {
     commandChecker(argc, argv);
-    // // cmd 3
-    // if (is_command_3(argc, argv))
-    // {
-    //     command_3_main_function(argc, argv);
-    // }
-    // // cmd 4
-    // if (is_command_4(argc, argv))
-    // {
-    //     command_4_main_function(argc, argv);
-    // }
 }
-/*
-C:\Users\ASUS\OneDrive\Documents\GitHub\Lab3\main.cpp
-*/
