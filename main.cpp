@@ -199,7 +199,7 @@ void handle_command_2(string algo_name, int input_size, string input_order, stri
         cout << "Error: do not have enough memory !\n";
         return;
     }
-    
+
     ll rtime = 0;
     ll cc = 0;
 
