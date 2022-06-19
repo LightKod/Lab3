@@ -176,7 +176,6 @@ void handle_command_1(string algo_name, string input_file, string output_para)
     ll rtime = 0;
     ll cc = 0;
 
-    cout << "\nInput:\n";
     cout << "-------------------------\n";
     writeFile("input.txt", a, input_size);
     process_sort(a, input_size, algo_name, rtime, cc);
@@ -258,7 +257,6 @@ void command_2_main_function(int argc, char *argv[])
 
     cout << "Algorithm: " << algo_name << endl;
     cout << "Input size: " << input_size << endl;
-    cout << "Input order: " << input_order << endl;
     handle_command_2(algo_name, input_size, input_order, output_para);
 }
 
