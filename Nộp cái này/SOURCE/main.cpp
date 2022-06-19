@@ -194,7 +194,8 @@ void command_1_main_function(int argc, char *argv[])
     f.open(input_file);
     f >> input_size;
     f.close();
-    cout << "Algorithm: " << algo_name << endl;
+    getMode(argv[1]);
+    cout << "Algorithm: " << GetAlgoType(algo_name)  << endl;
     cout << "Input file: " << input_file << endl;
     cout << "Input size: " << input_size << endl;
     handle_command_1(algo_name, input_file, output_para);
@@ -255,7 +256,8 @@ void command_2_main_function(int argc, char *argv[])
     string input_order = argv[4];
     string output_para = argv[5];
 
-    cout << "Algorithm: " << algo_name << endl;
+    getMode(argv[1]);
+    cout << "Algorithm: " << GetAlgoType(algo_name) << endl;
     cout << "Input size: " << input_size << endl;
     handle_command_2(algo_name, input_size, input_order, output_para);
 }
